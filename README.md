@@ -6,5 +6,7 @@ Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible t
 
 This repository consist of the following files:
 Machine Learning Project.Rmd
-Machine Learning Project.html
+
+Machine_Learning_Project.html
+
 
