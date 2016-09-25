@@ -5,11 +5,11 @@ date: "23. september 2016"
 output: html_document
 ---
 
-Background
+## Background
 
-Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement – a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. In this project, your goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform barbell lifts correctly and incorrectly in 5 different ways. 
+Using devices such as Jawbone Up, Nike FuelBand, and Fitbit it is now possible to collect a large amount of data about personal activity relatively inexpensively. These type of devices are part of the quantified self movement – a group of enthusiasts who take measurements about themselves regularly to improve their health, to find patterns in their behavior, or because they are tech geeks. One thing that people regularly do is quantify how much of a particular activity they do, but they rarely quantify how well they do it. In this project, your goal will be to use data from accelerometers on the belt, forearm, arm, and dumbell of 6 participants. They were asked to perform correctly and incorrectly in 5 different ways. 
 
-
+## Preparing and investigating the data
 ```{r}
 library(ggplot2); library(caret)
 
@@ -35,6 +35,7 @@ summary(is.na(mtottrain))
 featurePlot(x=mtottrain[,-c(13)],y=mtottrain$classe,plot="strip")
 ```
 
+## Preparatin for cross validation
 Accuracy on a training set is often optimistic. To be able to do a better estimate,
 I have chosen to split the original training set to a separate training and testing set.
 70% of the data will be in this new training set and the rest in the testing set.
@@ -49,7 +50,7 @@ dim(mtrain)
 dim(mtest)
 ```
 
-Fitting different models to see which one gives the best accuracy.
+## Fitting different models to see which one gives the best accuracy.
 I have chosen 3 of the methods which are used for categorization:
 - Gradiant Boosting
 - Random Foreset
@@ -57,41 +58,41 @@ I have chosen 3 of the methods which are used for categorization:
 
 ```{r, echo=FALSE}
 set.seed(55677)
-modfit1 <- train(classe~., data=mtrain, method="gbm", verbose=FALSE)  ## accuracy/kappa 0.8122661  0.7618243
-modfit2 <- train(classe~., data=mtrain, method="rf")   ## accuracy/kappa 0.9324219  0.9144129
+modfit1 <- train(classe~., data=mtrain, method="gbm", verbose=FALSE)  
+modfit2 <- train(classe~., data=mtrain, method="rf")  
 library(e1071)
 modfit3 <- svm(classe~., data=mtrain)
 ```
 
-Training result of Gradient Boosting model
+### Training result of Gradient Boosting model
 ```{r}
 print (modfit1)
 ```
 
-Training result of Random Forest model
+### Training result of Random Forest model
 ```{r}
 print (modfit2)
 
 ```
 
-Making predictions for all 3 models on the training set
+##Making predictions for all 3 models on the training set
 
 ```{r}
 pred1 <- predict(modfit1,mtest)
 pred2 <- predict(modfit2,mtest)
 pred3 <- predict(modfit3,mtest)
 
-confusionMatrix(pred1,mtest$classe) #0.8199 
-confusionMatrix(pred2,mtest$classe) #0.9441 
-confusionMatrix(pred3,mtest$classe) # 0.7884 
+confusionMatrix(pred1,mtest$classe) 
+confusionMatrix(pred2,mtest$classe) 
+confusionMatrix(pred3,mtest$classe) 
 
 ```
-Prediction Summary for the training set
+### Prediction Summary for the training set
 The Random Forest model gave the best prediction for the training set, the boosting model second and the svm model last.
 Decided to use the Random Forest model do to predictions on the original testing set
 
 
-Making predictions for the original testing set
+### Making predictions for the original testing set
 ```{r}
 # creating new dataframe with only the accelerometer data 
 mtottest <- orgtest[,c(40,41,42,    #belt
@@ -104,7 +105,7 @@ pred_final <- predict(modfit2,mtottest)
 ```
 
 
-Expected out of sample error
+## Expected out of sample error
 ```{r}
 
 table(pred2,mtest$classe)
